@@ -1,0 +1,43 @@
+# This is config file for configuring the training of  churn model
+---
+info:
+    base_dir: /Users/nkaveti/Documents/Kaggle/AML/
+    file_location: Bank Marketing Data/bank_marketing_v2.csv
+    id_column: 'id'
+#     model_file: models/
+#     prediction_file: predictions/prediction
+model:
+    type: classification
+    dep_var: 'Class'
+    model_list: ['lr', 'rf','et','dt','nn','ac','gb','kn']
+    lr_params: {penalty: 'l2', C: 1.0, fit_intercept: true, class_weight: 'balanced', solver: 'liblinear', max_iter: 100, multi_class: 'ovr', warm_start: false, n_jobs: }
+    rf_params: {n_estimators: 100, criterion: 'gini', max_depth: 7, min_samples_split: 10, min_samples_leaf: 3, min_weight_fraction_leaf: 0, max_features: 'auto', max_leaf_nodes: , min_impurity_decrease: 0, class_weight: 'balanced'}
+    et_params: {n_estimators: 100, criterion: 'gini', max_depth: 7, min_samples_split: 10, min_samples_leaf: 3, min_weight_fraction_leaf: 0, max_features: 'auto', max_leaf_nodes: , min_impurity_decrease: 0, class_weight: 'balanced'}
+    dt_params: {n_estimators: 100, criterion: 'gini', max_depth: 7, min_samples_split: 10, min_samples_leaf: 3, min_weight_fraction_leaf: 0, max_features: 'auto', max_leaf_nodes: , min_impurity_decrease: 0, class_weight: 'balanced'}
+    nn_params: {hidden_layer_sizes: 100, activation: 'relu', solver: 'adam', learning_rate_init: 0.001}
+    ac_params: {n_estimators: 100}
+    gb_params: {learning_rate: 0.01, n_estimators: 10, criterion: 'friedman_mse', subsample: 1, max_depth: 7, min_samples_split: 10, min_samples_leaf: 3, min_weight_fraction_leaf: 0, max_features: 'auto', max_leaf_nodes: , min_impurity_decrease: 0}
+    kn_params: {n_neighbors: 5,  leaf_size: 30, p: 2, metric: 'minkowski'}
+hyperopt:
+    run_hyperopt: true
+    lr_space: {'C': hp.quniform("x_C", 1, 5, 1)}
+    lr_trials: 5
+    rf_space: {'max_depth': {'hp_func':'qunif','min' : 1,'max':5,'step':1}}
+    rf_trials: 5
+feature_engineering:
+    transformations:
+        is_transformations: false
+        transformations_list: #['ln', 'power', 'sin', 'cos', 'exp']
+    interactions:
+        is_interactions: false
+        interactions_list: #[['balance', 'pdays'], ['loan', 'balance']] # 'all' to compute all interactions
+feature_selection:
+    top_k_best: 50
+cross_validation:
+    test_split: 0.25
+    time_based_test_split: true
+    date_column: 'date'
+    training_start: '2008-01-01'
+    training_end: '2009-12-31'
+    testing_start: '2010-01-01'
+    testing_end: '2010-12-31'
